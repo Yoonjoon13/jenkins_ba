@@ -16,7 +16,7 @@ metadata:
   name: jenkins-backend
   namespace: beom
 spec:
-  replicas: 1 
+  replicas: 1
   selector:
     matchLabels:
       app: jenkins-backend
