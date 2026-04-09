@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-db-secret
+  namespace: beom
+type: Opaque
+stringData:
+  SPRING_DATASOURCE_URL: jdbc:mariadb://192.100.200.23:3306/fileinnout
+  SPRING_DATASOURCE_USERNAME: innoutfile
+  SPRING_DATASOURCE_PASSWORD: quilified1234
+  SPRING_JPA_HIBERNATE_DDL_AUTO: update
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-backend
+  namespace: beom
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: jenkins-backend
+  template:
+    metadata:
+      labels:
+        app: jenkins-backend
+    spec:
+      containers:
+        - name: backend
+          image: chefjun/backend:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: backend-db-secret
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: -Dfile.encoding=UTF-8
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 40
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: beom
+spec:
+  selector:
+    app: jenkins-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-backend-service
+  namespace: beom
+spec:
+  type: NodePort
+  selector:
+    app: jenkins-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30081
