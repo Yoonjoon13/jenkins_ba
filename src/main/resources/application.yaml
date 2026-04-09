@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: demo
+  datasource:
+    url: jdbc:mariadb://192.100.200.23:3306/fileinnout
+    username: innoutfile
+    password: quilified1234
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+
+server:
+  error:
+    include-message: always
