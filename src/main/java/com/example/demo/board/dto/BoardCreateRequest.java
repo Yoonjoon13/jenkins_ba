@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public class BoardCreateRequest {
 
-    @NotBlank(message = "\uC81C\uBAA9\uC744 \uC785\uB825\uD574 \uC8FC\uC138\uC694.")
+    @NotBlank(message = "제목을 입력해 주세요.")
     private String title;
 
-    @NotBlank(message = "\uB0B4\uC6A9\uC744 \uC785\uB825\uD574 \uC8FC\uC138\uC694.")
+    @NotBlank(message = "내용을 입력해 주세요.")
     private String content;
 
     public BoardCreateRequest() {
